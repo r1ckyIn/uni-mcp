@@ -1,0 +1,12 @@
+{
+  "name": "uni-mcp",
+  "version": "0.1.0",
+  "description": "Out-of-the-box course assistant for university students using Canvas / Ed / Gradescope. Adds tool-routing knowledge, pitfall heuristics, and a guided workspace setup on top of the canvas-ed-mcp server.",
+  "author": {
+    "name": "Ricky",
+    "email": "rickyqin919@gmail.com",
+    "url": "https://github.com/r1ckyIn"
+  },
+  "repository": "https://github.com/r1ckyIn/uni-mcp",
+  "keywords": ["canvas", "edstem", "gradescope", "university", "course-assistant"]
+}

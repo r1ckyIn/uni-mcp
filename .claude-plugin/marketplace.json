@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "uni-mcp",
+  "description": "Marketplace for uni-mcp — an out-of-the-box course assistant plugin for university students.",
+  "owner": {
+    "name": "Ricky",
+    "url": "https://github.com/r1ckyIn"
+  },
+  "plugins": [
+    {
+      "name": "uni-mcp",
+      "source": "./",
+      "description": "Out-of-the-box course assistant for university students using Canvas / Ed / Gradescope. Adds tool-routing knowledge, pitfall heuristics, and a guided workspace setup on top of the canvas-ed-mcp server.",
+      "category": "education"
+    }
+  ]
+}
