@@ -1,0 +1,15 @@
+{
+  "name": "uni-mcp",
+  "description": "Marketplace for uni-mcp — an out-of-the-box course assistant plugin for university students.",
+  "owner": {
+    "name": "Ricky",
+    "url": "https://github.com/r1ckyIn"
+  },
+  "plugins": [
+    {
+      "name": "uni-mcp",
+      "description": "Out-of-the-box course assistant for university students using Canvas / Ed / Gradescope, built around the canvas-ed-mcp server. Skeleton release: install verification only so far; course-assistant skills are in development.",
+      "category": "education"
+    }
+  ]
+}

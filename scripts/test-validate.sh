@@ -19,6 +19,9 @@ for fixture_path in "$TEST_DIR"/*; do
   cp -r "$REPO_ROOT" "$work_dir/repo"
   cd "$work_dir/repo"
 
+  # Remove CLAUDE.md from test environment (so --strict tests can run properly)
+  rm -f CLAUDE.md
+
   # Apply fixture overlay (copy fixture files on top of repo)
   if [ -d "$fixture_path" ]; then
     find "$fixture_path" -type f ! -name "CONTEXT.md" | while read -r file; do

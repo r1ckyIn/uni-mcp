@@ -8,7 +8,7 @@ Out-of-the-box course assistant plugin for university students on Canvas / Ed / 
 
 ## Try the skeleton (Claude Code)
 
-```
+```bash
 /plugin marketplace add r1ckyIn/uni-mcp
 /plugin install uni-mcp@uni-mcp
 ```

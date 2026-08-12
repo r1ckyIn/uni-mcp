@@ -1,5 +1,5 @@
 # README
 
-This has no space after the first heading#
+#Bad heading with no space after the hash
 
 Bad markdown

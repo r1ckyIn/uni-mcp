@@ -1,0 +1,26 @@
+name: validate
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # Deliberately unpinned: validation should track the same CLI users run,
+      # and a rule change that breaks us here is exactly the signal we want.
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Validate repo (must be green)
+        run: scripts/validate.sh
+
+      - name: Fixture tests (each check must be able to turn red)
+        run: scripts/test-validate.sh

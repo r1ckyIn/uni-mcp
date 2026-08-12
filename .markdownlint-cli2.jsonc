@@ -1,0 +1,11 @@
+{
+  // Markdown lint config for scripts/validate.sh (issue #3).
+  "globs": ["**/*.md"],
+  // tests/fixtures are intentionally broken; they are exercised by
+  // scripts/test-validate.sh overlaying them onto a repo copy.
+  "ignores": ["node_modules/**", "tests/fixtures/**"],
+  "config": {
+    // Long lines are fine: docs are Chinese prose where 80 chars is unusable.
+    "MD013": false
+  }
+}
