@@ -1,7 +1,7 @@
 # ADR-0001: Claude 侧插件骨架的 manifest 与目录布局
 
 - 日期：2026-08-12
-- 状态：已定（issue #2）
+- 状态：已定（issue #2）；目录布局条款被 ADR-0002 取代（issue #10），manifest 字段条款仍有效
 
 ## Manifest 字段
 

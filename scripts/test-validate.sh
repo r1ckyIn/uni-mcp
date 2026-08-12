@@ -31,10 +31,11 @@ for fixture_path in "$TEST_DIR"/*; do
     continue
   fi
 
-  # Create tmp copy of repo — kept faithful to the real repo (CLAUDE.md stays;
-  # validate.sh's whitelist for its known plugin-root warning is part of what
-  # these tests exercise). node_modules is symlinked instead of copied: the
-  # lint tools only read it, and copying it per fixture is slow.
+  # Create tmp copy of repo — kept faithful to the real repo, dev files and
+  # all: strict validation must stay green with them present, because they
+  # live outside the plugin root (plugin/, ADR-0002). node_modules is
+  # symlinked instead of copied: the lint tools only read it, and copying it
+  # per fixture is slow.
   # Each step is guarded: if the copy fails, the overlay below must never run
   # with cwd still pointing at the real repo.
   work_dir=$(mktemp -d) || { echo "mktemp failed" >&2; exit 1; }
@@ -46,11 +47,14 @@ for fixture_path in "$TEST_DIR"/*; do
 
   # Apply fixture overlay (copy fixture files on top of repo).
   # CONTEXT.md and expect.txt are fixture metadata, not planted breakage.
+  # A failed copy must abort loudly — otherwise validate.sh runs against an
+  # unbroken repo copy and the fixture fails with a misleading exit-0 report.
+  # (set -o pipefail above makes the subshell's exit reach the || handler.)
   find "$fixture_path" -type f ! -name "CONTEXT.md" ! -name "expect.txt" | while read -r file; do
     rel_path="${file#$fixture_path/}"
-    mkdir -p "$(dirname "$rel_path")"
-    cp "$file" "$rel_path"
-  done
+    mkdir -p "$(dirname "$rel_path")" || exit 1
+    cp "$file" "$rel_path" || exit 1
+  done || { echo "fixture overlay copy failed: $fixture_name" >&2; exit 1; }
 
   # Run validate.sh, capture output and exit code (reset each iteration).
   exit_code=0

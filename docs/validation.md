@@ -14,13 +14,11 @@ Requirements: `claude` (Claude Code CLI) and `node`/`npm` on PATH, plus a one-ti
 | # | What | Tool | Config |
 | - | ---- | ---- | ------ |
 | 1 | Marketplace manifest structure (`.claude-plugin/marketplace.json`) | `claude plugin validate . --strict` | — |
-| 2 | Plugin manifest structure + skills norms (`.claude-plugin/plugin.json`, `skills/*/SKILL.md` frontmatter) | `claude plugin validate ./.claude-plugin/plugin.json --strict` | one accepted warning, see below |
+| 2 | Plugin manifest structure + skills norms (manifest + `skills/*/SKILL.md` under the marketplace entry's `source` dir, currently `plugin/`) | `claude plugin validate <source>/.claude-plugin/plugin.json --strict`, `<source>` read from marketplace.json | — |
 | 3 | Markdown lint | `markdownlint-cli2` (pinned via npx) | `.markdownlint-cli2.jsonc` |
 | 4 | Dead links: repo-internal relative links and heading anchors | `remark-validate-links` (pinned via npx) | `.remarkignore` |
 
-### Accepted warning in check 2
-
-`--strict` flags `CLAUDE.md at the plugin root is not loaded as project context`. The repo root doubles as the plugin root (ADR-0001), so the contributor-facing CLAUDE.md unavoidably sits at the plugin root; the runtime tolerates it. `validate.sh` whitelists exactly that warning line and fails on any other warning or error. If the CLI ever rewords the warning, the check goes red and the whitelist pattern needs updating — that is the safe failure direction.
+Check 2 runs warning-free: the plugin root is `plugin/` (ADR-0002), which carries no dev files, so under `--strict` any warning is a real failure. The old CLAUDE.md-at-plugin-root whitelist is gone with the layout that required it. Check 2's target path is derived from marketplace.json's `source` field rather than hard-coded, so the check always follows what users actually install and a dangling `source` turns it red.
 
 ### Deliberate scope limits
 
