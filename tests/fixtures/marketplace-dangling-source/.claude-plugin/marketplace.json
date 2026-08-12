@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "uni-mcp",
-      "source": "./plugin",
+      "source": "./does-not-exist",
       "description": "Out-of-the-box course assistant for university students using Canvas / Ed / Gradescope, built around the canvas-ed-mcp server. Skeleton release: install verification only so far; course-assistant skills are in development.",
       "category": "education"
     }

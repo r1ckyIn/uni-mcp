@@ -17,7 +17,7 @@ uni-mcp 是给大学生的开箱即用课程 AI 助手插件：Claude Code 和 C
 
 ## 打包形态（关键机制均已核实）
 
-- 同仓双 manifest：`.claude-plugin/`（Claude Code marketplace）+ `.codex-plugin/plugin.json`（Codex/ChatGPT 官方插件机制，2026-03 上线，可打包 skills + MCP servers，ChatGPT 与 Codex 共用插件目录）。
+- 同仓双 manifest：`.claude-plugin/`（Claude Code marketplace）+ `.codex-plugin/plugin.json`（Codex/ChatGPT 官方插件机制，2026-03 上线，可打包 skills + MCP servers，ChatGPT 与 Codex 共用插件目录）。〔2026-08-12 更新（issue #10 / ADR-0002）：插件内容已解耦进 `plugin/` 子目录，双 manifest 均放 `plugin/` 内（`plugin/.claude-plugin/` 已迁，Codex 侧届时放 `plugin/.codex-plugin/`），marketplace.json 留仓库根。〕
 - SKILL.md 知识层一套两端共用：两家都基于 agentskills.io 开放标准。
 - Codex 侧注意：custom prompts 已官方弃用，一切走 skills；skills 用户目录是 `~/.agents/skills`（`~/.codex/skills` 源码已标 deprecated，二手资料多写反）；自建 marketplace = 仓库根 `.agents/plugins/marketplace.json` + `codex plugin marketplace add owner/repo`，装完需新开 session。
 - Claude 侧注意：Claude Code 只读 CLAUDE.md、不原生读 AGENTS.md，脚手架必须生成 CLAUDE.md 一行 `@AGENTS.md` 导入；插件 `.mcp.json` 支持 `${CLAUDE_PLUGIN_ROOT}` 与用户环境变量 `${VAR}` 展开。

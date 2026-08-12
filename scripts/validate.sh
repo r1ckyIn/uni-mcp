@@ -26,31 +26,24 @@ if ! claude plugin validate . --strict 2>&1; then
 fi
 
 # Check 2: Plugin manifest structure + skills norms (claude plugin validate --strict)
-# Pointing at plugin.json validates the manifest plus the plugin directory,
-# including skills/*/SKILL.md frontmatter. --strict turns warnings (missing
-# descriptions, unrecognized fields) into failures — that is what enforces the
-# skills norms, so strict must run on the real repo, not only on dist builds.
-#
-# One warning is accepted: the repo root doubles as the plugin root (ADR-0001),
-# so the contributor-facing CLAUDE.md sits at the plugin root and validate
-# flags it; the runtime tolerates it. A failed run is excused only when it is
-# a pure strict-promotion failure (the CLI's own marker line is present) and
-# every complaint line is exactly that accepted warning. Anything else —
-# other warnings, errors, or a crash without complaint lines — still fails,
-# including in fixture copies: CLAUDE.md is NOT deleted from test copies, so
-# this whitelist is exercised by every fixture run.
+# The plugin root is wherever the marketplace entry's `source` points (ADR-0002:
+# plugin/). Read it from marketplace.json instead of hard-coding it, so this
+# check can never drift from what users actually install — `claude plugin
+# validate . --strict` accepts a dangling source, so the drift would otherwise
+# be invisible; here it fails with "File not found". Pointing at plugin.json
+# validates the manifest plus the plugin root, including skills/*/SKILL.md
+# frontmatter. --strict turns warnings (missing descriptions, unrecognized
+# fields) into failures — that is what enforces the skills norms, so strict
+# must run on the real repo, not only on dist builds. No whitelist: the plugin
+# root carries no dev files (the point of ADR-0002), so any warning here is a
+# real regression.
 echo "Checking plugin manifest + skills norms (strict mode)..." >&2
-plugin_status=0
-plugin_out="$(claude plugin validate ./.claude-plugin/plugin.json --strict 2>&1)" || plugin_status=$?
-printf '%s\n' "$plugin_out"
-if [ "$plugin_status" -ne 0 ]; then
-  complaints="$(printf '%s\n' "$plugin_out" | grep '❯' || true)"
-  unexpected="$(printf '%s\n' "$complaints" | grep -Fv 'root: CLAUDE.md at the plugin root is not loaded as project context' | grep -v '^$' || true)"
-  strict_marker=0
-  printf '%s\n' "$plugin_out" | grep -qF -- '--strict treats warnings as errors' || strict_marker=$?
-  if [ -z "$complaints" ] || [ -n "$unexpected" ] || [ "$strict_marker" -ne 0 ]; then
-    EXIT_CODE=1
-  fi
+plugin_source="$(node -p 'JSON.parse(require("fs").readFileSync(".claude-plugin/marketplace.json","utf8")).plugins[0].source' 2>/dev/null)"
+if [ -z "$plugin_source" ] || [ "$plugin_source" = "undefined" ]; then
+  echo "Cannot read plugins[0].source from .claude-plugin/marketplace.json" >&2
+  EXIT_CODE=1
+elif ! claude plugin validate "$plugin_source/.claude-plugin/plugin.json" --strict 2>&1; then
+  EXIT_CODE=1
 fi
 
 # Check 3: Markdown lint (markdownlint-cli2, pinned in package.json).
