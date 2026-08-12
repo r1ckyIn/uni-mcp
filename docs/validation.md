@@ -31,7 +31,7 @@ Requirements: `claude` (Claude Code CLI) and `node`/`npm` on PATH, plus a one-ti
 
 Each check type has at least one breakage fixture under `tests/fixtures/<case>/`:
 
-- The fixture directory mirrors the repo layout; `scripts/test-validate.sh` copies the repo to a temp dir, overlays the fixture's files on top, runs `scripts/validate.sh` there, and requires a non-zero exit **and** output matching the fixture's `expect.txt` (grep pattern), so the error provably points at the planted problem.
+- The fixture directory mirrors the repo layout; `scripts/test-validate.sh` copies the repo to a temp dir, overlays the fixture's files on top, runs `scripts/validate.sh` there, and requires a non-zero exit **and** output containing the fixture's `expect.txt` string (matched literally, never as a regex), so the error provably points at the planted problem. A missing or empty `expect.txt` fails the fixture.
 - `CONTEXT.md` and `expect.txt` inside a fixture are metadata, not payload — they are not overlaid.
 
 ## Extending (later tickets)
@@ -39,5 +39,5 @@ Each check type has at least one breakage fixture under `tests/fixtures/<case>/`
 New structure (for example the Codex-side manifest) joins this command instead of getting a second entry point:
 
 1. Add the check as a new block in `scripts/validate.sh` (always-run — no `command -v` guards that silently skip; pin tool versions).
-2. Add at least one breakage fixture: `tests/fixtures/<case>/` with the planted files, an `expect.txt` pattern, and a `CONTEXT.md` describing the breakage.
+2. Add at least one breakage fixture: `tests/fixtures/<case>/` with the planted files, an `expect.txt` holding the literal substring the failing output must contain, and a `CONTEXT.md` describing the breakage.
 3. Run `scripts/test-validate.sh` (fixture must red) and `scripts/validate.sh` (repo must stay green), then document the check in the table above.

@@ -6,7 +6,10 @@
 #
 # Requirements: `claude` on PATH, plus `npm ci` run once (lint/link tools are
 # pinned in package.json and resolved from node_modules — never silently skipped).
-set -e
+#
+# Deliberately no `set -e`: every check is guarded and failures accumulate in
+# EXIT_CODE so one red check never hides the others. New checks must follow
+# the same `if ! ...; then EXIT_CODE=1; fi` shape.
 
 EXIT_CODE=0
 
@@ -30,8 +33,11 @@ fi
 #
 # One warning is accepted: the repo root doubles as the plugin root (ADR-0001),
 # so the contributor-facing CLAUDE.md sits at the plugin root and validate
-# flags it; the runtime tolerates it. Any other warning or error still fails,
-# including in fixture copies — CLAUDE.md is NOT deleted from test copies, so
+# flags it; the runtime tolerates it. A failed run is excused only when it is
+# a pure strict-promotion failure (the CLI's own marker line is present) and
+# every complaint line is exactly that accepted warning. Anything else —
+# other warnings, errors, or a crash without complaint lines — still fails,
+# including in fixture copies: CLAUDE.md is NOT deleted from test copies, so
 # this whitelist is exercised by every fixture run.
 echo "Checking plugin manifest + skills norms (strict mode)..." >&2
 plugin_status=0
@@ -39,8 +45,10 @@ plugin_out="$(claude plugin validate ./.claude-plugin/plugin.json --strict 2>&1)
 printf '%s\n' "$plugin_out"
 if [ "$plugin_status" -ne 0 ]; then
   complaints="$(printf '%s\n' "$plugin_out" | grep '❯' || true)"
-  unexpected="$(printf '%s\n' "$complaints" | grep -Fv 'CLAUDE.md at the plugin root' | grep -v '^$' || true)"
-  if [ -z "$complaints" ] || [ -n "$unexpected" ]; then
+  unexpected="$(printf '%s\n' "$complaints" | grep -Fv 'root: CLAUDE.md at the plugin root is not loaded as project context' | grep -v '^$' || true)"
+  strict_marker=0
+  printf '%s\n' "$plugin_out" | grep -qF -- '--strict treats warnings as errors' || strict_marker=$?
+  if [ -z "$complaints" ] || [ -n "$unexpected" ] || [ "$strict_marker" -ne 0 ]; then
     EXIT_CODE=1
   fi
 fi
