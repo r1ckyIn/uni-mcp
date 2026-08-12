@@ -7,7 +7,7 @@ scripts/validate.sh        # all checks against this repo — must be green
 scripts/test-validate.sh   # fixture tests — every fixture must make validate.sh fail
 ```
 
-Requirements: `claude` (Claude Code CLI) and `node`/`npx` on PATH. The npm lint tools are pinned and fetched on demand by `npx --yes`; nothing needs a global install.
+Requirements: `claude` (Claude Code CLI) and `node`/`npm` on PATH, plus a one-time `npm ci` (the lint/link tools are pinned in `package.json` — dev-only, nothing ships with the plugin). `validate.sh` fails loudly if `node_modules` is missing; no check is ever silently skipped.
 
 ## Checks
 

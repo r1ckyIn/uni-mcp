@@ -13,11 +13,15 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: npm
 
       # Deliberately unpinned: validation should track the same CLI users run,
       # and a rule change that breaks us here is exactly the signal we want.
       - name: Install Claude Code CLI
         run: npm install -g @anthropic-ai/claude-code
+
+      - name: Install pinned lint tools
+        run: npm ci
 
       - name: Validate repo (must be green)
         run: scripts/validate.sh
