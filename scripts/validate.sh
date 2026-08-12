@@ -39,7 +39,7 @@ plugin_out="$(claude plugin validate ./.claude-plugin/plugin.json --strict 2>&1)
 printf '%s\n' "$plugin_out"
 if [ "$plugin_status" -ne 0 ]; then
   complaints="$(printf '%s\n' "$plugin_out" | grep '❯' || true)"
-  unexpected="$(printf '%s\n' "$complaints" | grep -v 'CLAUDE.md at the plugin root' | grep -v '^$' || true)"
+  unexpected="$(printf '%s\n' "$complaints" | grep -Fv 'CLAUDE.md at the plugin root' | grep -v '^$' || true)"
   if [ -z "$complaints" ] || [ -n "$unexpected" ]; then
     EXIT_CODE=1
   fi
