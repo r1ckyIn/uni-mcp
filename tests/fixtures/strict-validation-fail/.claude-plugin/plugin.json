@@ -1,0 +1,11 @@
+{
+  "name": "uni-mcp",
+  "version": "0.1.0",
+  "description": "Out-of-the-box course assistant",
+  "author": {
+    "name": "Ricky",
+    "email": "rickyqin919@gmail.com"
+  },
+  "license": "MIT",
+  "customField": "this is not recognized"
+}

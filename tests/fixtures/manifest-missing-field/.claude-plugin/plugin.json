@@ -1,0 +1,12 @@
+{
+  "name": "uni-mcp",
+  "version": "0.1.0",
+  "author": {
+    "name": "Ricky",
+    "email": "rickyqin919@gmail.com",
+    "url": "https://github.com/r1ckyIn"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/r1ckyIn/uni-mcp",
+  "keywords": ["canvas", "edstem", "gradescope", "university", "course-assistant"]
+}
