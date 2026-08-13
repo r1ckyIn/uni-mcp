@@ -4,10 +4,10 @@ Routes for University of Sydney systems that have no API, reached with a browser
 
 ## Timetable
 
-- URL: `https://timetable.sydney.edu.au/even/student`
+- URL: `https://timetable.sydney.edu.au/even/student` in even calendar years, `https://timetable.sydney.edu.au/odd/student` in odd ones — the timetable system runs parallel per-year instances named by year parity, so pick the path from the current year.
 - What's there: the personal class timetable — lecture, tutorial and lab times with rooms.
 - How to query: open the URL in the logged-in browser; the timetable renders after UniKey sign-in.
-- Pitfalls: the bare domain `timetable.sydney.edu.au` lands on an error page — always use the full `/even/student` path.
+- Pitfalls: the bare domain `timetable.sydney.edu.au` lands on an error page — always use a full `/even/student` or `/odd/student` path. The wrong-parity instance still logs in and renders, but shows the other year's timetable.
 
 ## Sydney Student
 
@@ -28,6 +28,7 @@ Routes for University of Sydney systems that have no API, reached with a browser
 - URL: via Canvas — course left sidebar → Zoom tab.
 - What's there: links for live online classes, plus cloud recordings in units that use Zoom instead of Echo360.
 - How to query: open the unit in Canvas and follow the Zoom tab.
+- Pitfalls: not every unit enables the tab — its absence means the unit doesn't run scheduled Zoom classes, not that the link moved.
 
 ## University GitHub
 
@@ -41,6 +42,7 @@ Routes for University of Sydney systems that have no API, reached with a browser
 - URL: via the unit's Canvas reading list (sidebar naming varies by unit), or `https://library.sydney.edu.au`
 - What's there: digitised textbook excerpts and unit reading lists.
 - How to query: prefer the Canvas reading-list entry — it deep-links to the digitised excerpt; the library site covers cross-unit search.
+- Pitfalls: digitised excerpts sit behind the library's own viewer, not plain PDFs — reach them through the reading-list link rather than guessing a file URL.
 
 ## Handbook
 

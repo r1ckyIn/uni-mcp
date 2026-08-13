@@ -238,7 +238,7 @@ function checkPluginManifest(sourceDir) {
     }
   }
 
-  return { name, version };
+  return { name, version, description: manifest.description, interface: manifest.interface };
 }
 
 // Codex-only skill rules the Claude-side strict validation (check 2) cannot
@@ -279,7 +279,7 @@ function checkSkills(sourceDir) {
 // agree on identity and version. Fields missing on the Claude side are the
 // Claude validator's job (check 2), so comparison skips them rather than
 // reporting a drift against the literal string "undefined".
-function checkClaudeSync(sourceDir, codex) {
+function checkClaudeSync(sourceDir, codex, claudeEntry) {
   const claudePath = join(sourceDir, ".claude-plugin/plugin.json");
   const claude = readJson(claudePath, "claude plugin manifest");
   if (claude === null || codex === null) return;
@@ -288,6 +288,24 @@ function checkClaudeSync(sourceDir, codex) {
   }
   if (typeof claude.version === "string" && codex.version !== null && claude.version !== codex.version) {
     errors.push(`manifest drift: .codex-plugin version "${codex.version}" != .claude-plugin version "${claude.version}"`);
+  }
+  // The release description is hand-written in four slots (this manifest pair,
+  // codex interface.longDescription, and the Claude marketplace entry); syncing
+  // only name/version would let a stale description keep shipping to one host's
+  // listing while validate stays green.
+  if (typeof claude.description === "string" && typeof codex.description === "string"
+    && claude.description !== codex.description) {
+    errors.push("manifest drift: .codex-plugin description != .claude-plugin description");
+  }
+  if (typeof codex.description === "string" && isObject(codex.interface)
+    && typeof codex.interface.longDescription === "string"
+    && codex.interface.longDescription !== codex.description) {
+    errors.push("manifest drift: .codex-plugin interface.longDescription != its own description");
+  }
+  if (typeof claude.description === "string" && isObject(claudeEntry)
+    && typeof claudeEntry.description === "string"
+    && claudeEntry.description !== claude.description) {
+    errors.push(`marketplace description drift: ${CLAUDE_MARKETPLACE} entry != .claude-plugin description`);
   }
 }
 
@@ -353,13 +371,14 @@ if (marketplace !== null) {
       if (codex !== null && entryName !== null && codex.name !== null && codex.name !== entryName) {
         errors.push(`${label}: name "${entryName}" != plugin manifest name "${codex.name}"`);
       }
-      checkSkills(sourcePath);
-      checkClaudeSync(sourcePath, codex);
-
-      // Source-path sync with the same-named Claude marketplace entry (its
-      // `source` is a plain string). A missing/odd Claude entry is check 1's
-      // problem; only a present, disagreeing path is drift.
+      // Same-named Claude marketplace entry (its `source` is a plain string).
+      // A missing/odd Claude entry is check 1's problem; only a present,
+      // disagreeing value is drift.
       const claudeEntry = (claudeMarketplace?.plugins ?? []).find?.((p) => p?.name === entryName);
+
+      checkSkills(sourcePath);
+      checkClaudeSync(sourcePath, codex, claudeEntry);
+
       if (claudeEntry && typeof claudeEntry.source === "string"
         && normalizeContract(claudeEntry.source) !== normalizeContract(sourcePath)) {
         errors.push(`marketplace source drift: plugins[${i}] "${sourcePath}" != ${CLAUDE_MARKETPLACE} "${claudeEntry.source}"`);

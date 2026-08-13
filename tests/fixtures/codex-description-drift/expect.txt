@@ -1,0 +1,1 @@
+manifest drift: .codex-plugin description
