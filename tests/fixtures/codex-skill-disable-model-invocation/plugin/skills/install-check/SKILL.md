@@ -1,6 +1,7 @@
 ---
 name: install-check
 description: This skill should be used when the user asks to verify the uni-mcp plugin installation — "check uni-mcp", "is uni-mcp installed", "is the uni-mcp plugin working" — or has just installed uni-mcp and wants to confirm its skills load.
+disable-model-invocation: true
 ---
 
 # Install Check

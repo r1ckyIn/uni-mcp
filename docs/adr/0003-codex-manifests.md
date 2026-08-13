@@ -11,12 +11,12 @@
 
 - `policy.installation: AVAILABLE`、`category: Education`。
 - `policy.authentication: ON_USE`：本插件无鉴权面（不带 MCP server），该字段惰性；取官方 skills-only 插件（documents/pdf 等）的一致先例。plugin-creator 脚手架默认 ON_INSTALL，属可换项。
-- `interface` 块整个必填：`displayName`/`shortDescription`/`longDescription`/`developerName`/`category`/`defaultPrompt` 是 Codex ingestion 的硬性要求（缺任一即非法 manifest），与 Claude manifest 的最小字段集不同，照单全给。
-- 双 manifest 纪律：`.codex-plugin` 与 `.claude-plugin` 的 `name`、`version` 必须一致，check 5 强制（两宿主装的是同一个 `plugin/` 目录，版本漂移等于给同一载荷贴两个发行号）。本票安装载荷再次变化（`plugin/` 增 `.codex-plugin/`），版本 0.2.0 → 0.3.0 双双升，沿用 ADR-0002 的升版理由（安装缓存按版本分目录）。
+- `interface` 块整个必填：`displayName`/`shortDescription`/`longDescription`/`developerName`/`category`/`capabilities`/`defaultPrompt` 七项是 Codex ingestion 的硬性要求（缺任一即非法 manifest；`capabilities` 在官方校验里没有缺省放行分支，skills-only 插件给空数组），与 Claude manifest 的最小字段集不同，照单全给。
+- 双 manifest 纪律：`.codex-plugin` 与 `.claude-plugin` 的 `name`、`version` 必须一致，check 5 强制（两宿主装的是同一个 `plugin/` 目录，版本漂移等于给同一载荷贴两个发行号）；source 目录下 `.claude-plugin/plugin.json` 缺失直接红（防护失效关闭，不静默跳过）。两份 marketplace 同受同步纪律：顶层 `name` 必须一致（安装 id `<plugin>@<marketplace>` 两端一致的执行面），同名插件条目的 source 路径必须一致。本票安装载荷再次变化（`plugin/` 增 `.codex-plugin/`），版本 0.2.0 → 0.3.0 双双升，沿用 ADR-0002 的升版理由（安装缓存按版本分目录）。
 
 ## 校验定案
 
-codex CLI 全程零校验（0.144.1 实测 2026-08-13）：`plugin marketplace add` 与 `plugin add` 对缺 `version` 的 manifest 照常安装、版本目录落成 `local`。因此 Codex 侧没有对应 `claude plugin validate` 的宿主工具可用，check 5 用自写静态镜像 `scripts/check-codex-manifests.mjs`。schema 权威是 codex-cli 内置的 plugin-creator 系统 skill（`references/plugin-json-spec.md` + `scripts/validate_plugin.py`），升级 codex CLI 时按它对照更新脚本。CI 不装 codex CLI——装了也校验不了任何东西，纯耗时。
+codex CLI 全程零校验（0.144.1 实测 2026-08-13）：`plugin marketplace add` 与 `plugin add` 对缺 `version` 的 manifest 照常安装、版本目录落成 `local`。因此 Codex 侧没有对应 `claude plugin validate` 的宿主工具可用，check 5 用自写静态镜像 `scripts/check-codex-manifests.mjs`。schema 权威是 codex-cli 内置的 plugin-creator 系统 skill：plugin manifest 与 skills 半边以 `scripts/validate_plugin.py` 为可执行权威（本仓 manifest 已用它跑通复核），marketplace 半边没有可执行权威、只有 `references/plugin-json-spec.md` 的行文规则；升级 codex CLI 时按两者对照更新脚本。check 5 同时照权威校验 skills 子目录：每个子目录必须有 SKILL.md，frontmatter 的 `disable-model-invocation` 只能缺省或为 false——这是 Claude 侧校验不知道的 Codex 独有规则，正是共用 skills 目录最容易踩的一类。CI 不装 codex CLI——装了也校验不了任何东西，纯耗时。
 
 ## 安装拷贝语义（实测 0.144.1）
 
@@ -24,7 +24,7 @@ codex CLI 全程零校验（0.144.1 实测 2026-08-13）：`plugin marketplace a
 
 ## SKILL.md 两端共用的代价
 
-install-check 原文依赖 `${CLAUDE_PLUGIN_ROOT}`（Claude 专属变量，Codex 不设等价物），已改为宿主无关寻径（从 SKILL.md 位置上溯两级到插件根）+ 按宿主选 manifest 文件。这是「一套两端」的既定代价：skill 正文不得依赖单一宿主的变量或路径约定。
+install-check 原文依赖 `${CLAUDE_PLUGIN_ROOT}`（Claude 专属变量，Codex 不设等价物），已改为分宿主指引：Claude 侧保留可直接执行的 shell 命令（变量只在 shell 展开），Codex 侧从 skill 目录上溯两级定位插件根、读 `.codex-plugin/plugin.json`。这是「一套两端」的既定代价：skill 正文不得依赖单一宿主的变量或路径约定。
 
 ## ChatGPT 桌面路径（实测 2026-08-13）
 

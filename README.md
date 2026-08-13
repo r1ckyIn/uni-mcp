@@ -22,4 +22,4 @@ codex plugin marketplace add r1ckyIn/uni-mcp
 codex plugin add uni-mcp@uni-mcp
 ```
 
-Open a new session and ask "check uni-mcp". ChatGPT desktop's Codex view shares the same plugin config, so a CLI install shows up there too — no separate steps.
+Open a new session and ask "check uni-mcp". ChatGPT desktop's Codex view shares the same plugin config, so a CLI install shows up there too — no separate steps. (An in-app install path that skips the CLI entirely is not verified yet.)

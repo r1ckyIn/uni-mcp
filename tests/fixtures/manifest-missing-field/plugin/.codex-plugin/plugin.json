@@ -1,6 +1,6 @@
 {
   "name": "uni-mcp",
-  "version": "0.3.0",
+  "version": "0.1.0",
   "description": "Out-of-the-box course assistant for university students using Canvas / Ed / Gradescope, built around the canvas-ed-mcp server. Skeleton release: install verification only so far; course-assistant skills are in development.",
   "author": {
     "name": "Ricky",
@@ -9,7 +9,13 @@
   },
   "license": "MIT",
   "repository": "https://github.com/r1ckyIn/uni-mcp",
-  "keywords": ["canvas", "edstem", "gradescope", "university", "course-assistant"],
+  "keywords": [
+    "canvas",
+    "edstem",
+    "gradescope",
+    "university",
+    "course-assistant"
+  ],
   "skills": "./skills/",
   "interface": {
     "displayName": "uni-mcp",

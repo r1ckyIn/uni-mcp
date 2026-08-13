@@ -1,0 +1,1 @@
+frontmatter field `disable-model-invocation` must be false

@@ -24,4 +24,4 @@ codex plugin marketplace add r1ckyIn/uni-mcp
 codex plugin add uni-mcp@uni-mcp
 ```
 
-新开一个 session 问「check uni-mcp」即可。ChatGPT 桌面的 Codex 视图与 CLI 共用插件配置，CLI 装完桌面端直接可见，无需额外步骤。
+新开一个 session 问「check uni-mcp」即可。ChatGPT 桌面的 Codex 视图与 CLI 共用插件配置，CLI 装完桌面端直接可见，无需额外步骤。（完全不装 CLI、纯 app 内安装的路径尚未验证。）
