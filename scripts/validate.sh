@@ -63,4 +63,14 @@ if ! npx --no-install remark . --use remark-validate-links --frail --quiet 2>&1;
   EXIT_CODE=1
 fi
 
+# Check 5: Codex-side manifests (issue #4) — .agents/plugins/marketplace.json
+# plus .codex-plugin/plugin.json under each entry's source dir, including
+# name/version sync with the Claude manifest. Static mirror of the codex
+# ingestion schema (codex CLI validates nothing at install time — see the
+# script header for the 2026-08-13 test evidence and the schema source).
+echo "Checking codex manifests..." >&2
+if ! node scripts/check-codex-manifests.mjs 2>&1; then
+  EXIT_CODE=1
+fi
+
 exit $EXIT_CODE

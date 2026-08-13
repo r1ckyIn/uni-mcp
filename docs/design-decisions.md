@@ -79,7 +79,7 @@ uni-mcp 是给大学生的开箱即用课程 AI 助手插件：Claude Code 和 C
 
 - unsw-mcp 接入（下期 milestone）。
 - canvas-ed-mcp 的 outline 解析器丢 Type 列（知识层先教用 WebFetch 抓原页兜底），及 README 底部 license 表述与 MIT badge 不一致。
-- ChatGPT 桌面端安装第三方 marketplace 插件的确切步骤实测。
+- ChatGPT 桌面端安装第三方 marketplace 插件的确切步骤实测。〔2026-08-13 更新（issue #4 / ADR-0003）：CLI 装好后桌面端可见 + `codex://` deeplink 直达插件页已实测走通，此项了结；收窄为「桌面端不经 CLI 的纯 app 内浏览/安装入口是否存在」继续挂账。〕
 - Codex 官方插件目录（github.com/openai/plugins）的第三方投稿流程未核实。
 
 ## 关键事实来源
