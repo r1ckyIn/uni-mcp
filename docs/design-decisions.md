@@ -33,7 +33,7 @@ uni-mcp 是给大学生的开箱即用课程 AI 助手插件：Claude Code 和 C
 ## 知识层（三层）
 
 1. 工具路由 playbook（静态随插件，英文）：哪类问题用哪个工具、什么顺序查最省，例如问 due 用 `canvas_get_upcoming`、找课件先 `list_modules` 别直接 `list_files`、搜 Ed 先 `search` 别翻页。
-2. 踩坑启发（静态随插件，英文）：closing time ≠ due time；考核表必看 Type 列（描述写 Online quiz 可能实为 In-class + LockDown Browser）；信息优先级按问题类型分链——权重与 due 以官方 unit outline 为权威、实际截止看 Canvas 作业对象（两者不一致取早的）、执行细则看 Ed staff FAQ、时效通知看官方邮件。不设单一优先级链（Ricky 自己工作区两处链写法本就是不同维度）。
+2. 踩坑启发（静态随插件，英文）：closing time ≠ due time；考核表必看 Type 列（描述写 Online quiz 可能实为 In-class + LockDown Browser）；信息优先级按问题类型分链——权重与 due 以官方 unit outline 为权威、实际截止看 Canvas 作业对象（两者不一致取早的）、执行细则看 Ed staff FAQ、时效通知看官方邮件。不设单一优先级链（Ricky 自己工作区两处链写法本就是不同维度）。〔2026-08-13 更新（issue #5 / ADR-0004）：第 1、2 层已合并落地为单一 `course-playbook` skill，坑点贴在对应路由旁；USYD 路线放 skill 的 `references/` 子目录按需加载。〕
 3. 课程地图（setup 生成的活文件，跟随用户语言）：每门课的作业/讲义/讨论各在哪个平台、浏览器源路线、日常发现随手增补。
 
 - USYD 路线作为第一个内置参考实例（来自历史实据挖掘）：Timetable 正确入口 `timetable.sydney.edu.au/even/student`（裸域名是错误页）、Sydney Student（选退课/census/正式成绩）、Echo360 录播（Canvas 左侧 Recorded Lectures，可下 TXT 字幕）、Zoom tab、github.sydney.edu.au（学校企业版，非公网 github.com）、Library 数字化节选、Handbook。

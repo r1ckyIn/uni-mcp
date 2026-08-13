@@ -12,7 +12,7 @@
 
 ## 文档语言例外(Ricky 2026-08-13 认可)
 
-仓库文档默认中文(AGENTS.md 规则)。例外:`docs/validation.md` 与 `tests/fixtures/*/CONTEXT.md` 沿用英文存量,补丁跟随所在文件语言,评审不再报该项;整文转中文需另开票。README 走双语门面:英文主文件 + `README.zh-CN.md`(以英文版为准)。
+仓库文档默认中文(AGENTS.md 规则)。例外:`docs/validation.md` 与 `tests/fixtures/*/CONTEXT.md` 沿用英文存量,补丁跟随所在文件语言,评审不再报该项;整文转中文需另开票。README 走双语门面:英文主文件 + `README.zh-CN.md`(以英文版为准)。`plugin/**` 的交付物(SKILL.md、references、manifest)按设计定案全英文,评审同样不报该项。
 
 ## Agent skills
 
