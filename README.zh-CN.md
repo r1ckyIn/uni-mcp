@@ -6,7 +6,7 @@
 
 面向 Canvas / Ed / Gradescope 大学生的开箱即用课程 AI 助手插件，围绕 [canvas-ed-mcp](https://github.com/r1ckyIn/canvas-ed-mcp) server 构建。装进 Claude Code 或 ChatGPT 桌面（Codex 视图），跑一次 setup，AI 就带着合适的工具、知识和工作区接管课程事务。
 
-> **状态：开发中。** 目前已有的是两端可安装骨架——一个 `install-check` 技能。setup 流程和知识层在开发：进度见 [Issues](https://github.com/r1ckyIn/uni-mcp/issues)，设计定案在 [docs/design-decisions.md](docs/design-decisions.md)。本文件是占位版，完整双语门面随 [#9](https://github.com/r1ckyIn/uni-mcp/issues/9) 发布。
+> **状态：开发中。** 目前已有的是两端可安装骨架和 `course-playbook` 知识层（工具路由、踩坑启发、USYD 浏览器路线）。setup 流程在开发：进度见 [Issues](https://github.com/r1ckyIn/uni-mcp/issues)，设计定案在 [docs/design-decisions.md](docs/design-decisions.md)。本文件是占位版，完整双语门面随 [#9](https://github.com/r1ckyIn/uni-mcp/issues/9) 发布。
 
 ## 试装骨架（Claude Code）
 

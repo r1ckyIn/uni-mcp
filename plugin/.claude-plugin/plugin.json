@@ -1,7 +1,7 @@
 {
   "name": "uni-mcp",
-  "version": "0.3.0",
-  "description": "Out-of-the-box course assistant for university students using Canvas / Ed / Gradescope, built around the canvas-ed-mcp server. Skeleton release: install verification only so far; course-assistant skills are in development.",
+  "version": "0.4.0",
+  "description": "Out-of-the-box course assistant for university students using Canvas / Ed / Gradescope, built around the canvas-ed-mcp server. Ships the course-playbook knowledge layer (tool routing, pitfall heuristics, USYD browser routes); the setup flow is in development.",
   "author": {
     "name": "Ricky",
     "email": "rickyqin919@gmail.com",
