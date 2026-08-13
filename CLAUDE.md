@@ -10,6 +10,10 @@
 
 工具建议与本仓定案冲突时,以 `docs/design-decisions.md` 为准。
 
+## 文档语言例外(Ricky 2026-08-13 认可)
+
+仓库文档默认中文(AGENTS.md 规则)。例外:`docs/validation.md` 与 `tests/fixtures/*/CONTEXT.md` 沿用英文存量,补丁跟随所在文件语言,评审不再报该项;整文转中文需另开票。README 走双语门面:英文主文件 + `README.zh-CN.md`(以英文版为准)。
+
 ## Agent skills
 
 ### Issue tracker
