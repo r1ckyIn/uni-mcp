@@ -1,6 +1,6 @@
 ---
 name: setup
-description: This skill should be used when the user asks to set up their course workspace — "run setup", "set up uni-mcp", "set up my courses" (in any language) — or wants to add a course, start a new semester, or refresh the workspace after an enrolment change ("I dropped a unit", "new semester"), or has just finished installing the canvas-ed-mcp server and wants the workspace built. Covers checking connectivity, choosing which courses to manage, mapping each course, laying out the workspace files (AGENTS.md, status truth source, one directory per course), and putting the folder under version control. Safe to rerun — a rerun refreshes incrementally.
+description: This skill should be used when the user asks to set up their course workspace — "run setup", "set up my courses" (in any language) — or wants to add a course, start a new semester, refresh the workspace after an enrolment change ("I dropped a unit"), or has just installed the canvas-ed-mcp server and wants the workspace built. Covers checking connectivity, choosing which courses to manage, mapping each course, laying out the workspace files (AGENTS.md, status truth source, one directory per course), and putting the folder under version control. Safe to rerun — a rerun refreshes incrementally.
 ---
 
 # Setup
@@ -27,7 +27,7 @@ Prove the tools work before promising anything, with two read-only calls: `canva
 - **Tools absent from the session** → the canvas-ed-mcp server is not connected: follow the server-install skill, from [Tools missing from the session](../server-install/SKILL.md#tools-missing-from-the-session) when the server is already installed, or the whole flow when it is not. Either way the tools only appear in a fresh session, so setup cannot continue in this one — finish that flow, have the user restart the host, and start setup again from Step 1.
 - **A call fails with an authentication error** → that one service's token is missing or expired (Sydney Canvas tokens expire within 90 days). Run [Token refresh](../server-install/SKILL.md#token-refresh) for that service only. The running server read the old token when it started, so a fresh one reaches it only after the host restarts — same as above: restart, then start setup again from Step 1.
 
-Do not repeat token instructions here — server-install owns that flow, and a second copy would drift.
+Anything token-related belongs to server-install: point at it and let it own the flow, so there is only ever one copy to keep true. Done when both calls return the user's real data.
 
 ## Step 3 — Pick the courses
 
@@ -65,11 +65,11 @@ For each picked course, one recon pass, then one file. Keep it to these calls �
 
 Write `<COURSE CODE>/course-map.md` from what came back, following the shape in [references/workspace-templates.md](references/workspace-templates.md). Course folders are named by course code alone — no semester, no year in the path. Record what is true for **this** course: which platform holds the real deadline, where slides actually live, whether Q&A runs on Ed or Canvas Discussions or neither, which assessments exist, and any quirk worth remembering (a unit that posts assignments only as announcements, a unit with no Ed at all). Compare the outline's dates against Canvas while both are in front of you and write down every disagreement — a real unit had an outline saying 23:59 and a Canvas object saying 13:59 for the same task. That comparison costs nothing now and is expensive to redo the night before. What the recon could not establish is written down as unknown rather than guessed.
 
-Materials: download the outline and syllabus only. Save the parsed outline plus the syllabus body as `<COURSE CODE>/outline.md`, with the source URL and the date fetched at the top; if the unit posts an outline PDF as a Canvas file, `canvas_download_file` it with `save_path` pointing into the course folder. Everything else — slides, sheets, readings — is downloaded later when the user actually asks for it. Create no other subfolders: an empty `lectures/` helps nobody.
+Materials: download the outline and syllabus only. Save the parsed outline plus the syllabus body as `<COURSE CODE>/outline.md`, with the source URL and the date fetched at the top; if the unit posts an outline PDF as a Canvas file, `canvas_download_file` it with `save_path` pointing into the course folder. Everything else — slides, sheets, readings — is downloaded later when the user actually asks for it, into a subfolder created at that moment; an empty `lectures/` helps nobody.
 
 On a rerun, refresh the facts setup owns (IDs, assessment list, where things live) and keep every line a human or a later session added — merge into the file, never overwrite it. Existing downloaded materials are left alone.
 
-Once every course is mapped, one `canvas_get_all_grades` call covers all of them at once — use it to fill the status column of the assessment table in Step 5 rather than asking per course.
+Once every course is mapped, one `canvas_get_all_grades` call covers all of them at once — use it to fill the status column of the assessment table in Step 5 rather than asking per course. Done when every course the user picked has a map and an outline file, including the ones whose recon came back thin.
 
 ## Step 5 — Write the status files
 
@@ -80,7 +80,7 @@ Once every course is mapped, one `canvas_get_all_grades` call covers all of them
 - `weekly.md` — this week's plan, plus how far the user has got in each course.
 - `not-doing.md` — decisions to deliberately not do something, with the date and the reason, so the same idea is not reconsidered every week.
 
-Those four are the only status files that may ever exist; the rule is written into `AGENTS.md` so later sessions keep it. Setup fills `assessments.md` from the tools and refreshes it on every rerun; the other three belong to the user — create them with their heading and leave them alone from then on, on the first run and every rerun.
+Those four are the only status files that may ever exist; the rule is written into `AGENTS.md` so later sessions keep it. Setup fills `assessments.md` from the tools and refreshes it on every rerun; the other three belong to the user — create them with their heading and leave them alone from then on, on the first run and every rerun. Done when the four files exist and every assessment component from every managed course has a row.
 
 ## Step 6 — Record browser routes
 
@@ -102,7 +102,7 @@ git -C <workspace> add -A
 git -C <workspace> diff --cached --quiet || git -C <workspace> commit -qm "Set up course workspace"
 ```
 
-The `diff --cached --quiet` guard makes a rerun that changed nothing a no-op instead of an error. Tell the user one sentence with no jargon: everything is saved, and if something later gets messed up, say so and it can be rolled back to how it was. From then on `AGENTS.md` carries the habit — later sessions save a snapshot after each meaningful change.
+The `diff --cached --quiet` guard makes a rerun that changed nothing a no-op instead of an error. Tell the user one sentence with no jargon: everything is saved, and if something later gets messed up, say so and it can be rolled back to how it was. From then on `AGENTS.md` carries the habit — later sessions save a snapshot after each meaningful change. Done when the folder holds a commit covering every file setup wrote and the user has heard that one sentence.
 
 ## Step 8 — Hand over
 
