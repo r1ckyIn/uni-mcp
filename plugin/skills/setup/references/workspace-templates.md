@@ -41,6 +41,7 @@ Course facts belong in these files, not in the host's own memory. Host memory (C
 
 - The user may not know command-line tools. Run commands for them instead of telling them what to type. When they do have to act — click a link, log in, pick something on a page — give one step at a time.
 - Course questions: follow the uni-mcp course-playbook skill's tool routing, and read that course's `course-map.md` first — it says which platform actually holds the thing being asked about.
+- Canvas hands the tools due dates in UTC and they print with no timezone. Convert to the user's local time before saying or writing a deadline: a printed `13:59` is a Sydney `23:59`. Everything already in this workspace is stored converted.
 - Refresh assessment facts from the Canvas / Ed / Gradescope tools rather than trusting the table's age. Progress the tools cannot see — which week the user has revised to, what they found hard — goes in `status/weekly.md` when they mention it.
 - Semester over: move the finished course folders whole into `archive/<YYYY-MM>-<what>/`. Never delete them.
 - Adding a course, or a new semester starting: run the uni-mcp setup skill again. It refreshes incrementally and breaks nothing that is already here.
@@ -127,7 +128,8 @@ Next: <when to look again, e.g. "outlines usually appear in week 1">
 
 `status/assessments.md` — setup fills this and refreshes it on every rerun. Its rules:
 
-- **Sort:** the soonest deadline at the top, the end of semester at the bottom. Anything that repeats — a weekly quiz, a weekly lab exercise — goes above the dated rows, since it is always imminent. A row the outline dates only in words keeps those words ("Formal exam period") and sits where that phrase falls in the semester, which for an exam period is the end.
+- **Sort:** the soonest deadline at the top, the end of semester at the bottom. Anything that repeats — a weekly quiz, a weekly lab exercise — goes above the dated rows, since it is always imminent. Above the dated rows too, and marked, goes anything whose date nobody knows yet but somebody has to chase: an outline saying "Multiple weeks" against a blank Canvas date usually means the week gets assigned in class. A row the outline dates only in words keeps those words ("Formal exam period") and sits where that phrase falls in the semester, which for an exam period is the end.
+- **Times:** Sydney local time, converted. Canvas hands the tools UTC and they print it bare, so a raw `13:59` written into this table is a deadline ten hours early.
 - **Rows:** one per assessment component from the outline, never one per Canvas assignment object. A weekly component gets a single row, a note of its cadence, and the next instance's date in the due column.
 - **Notes:** where each fact came from, plus the AI policy that arrives with the same outline fetch. When a fact changes, the superseded value stays in this column with the date it changed.
 - **Status:** left empty by setup — the recon reads deadlines, not submissions. Later sessions fill a row in when the user asks, from `canvas_get_submission_status`, which is the only tool that reports per-assignment state and marks (`canvas_get_grades` and `canvas_get_all_grades` return course totals).

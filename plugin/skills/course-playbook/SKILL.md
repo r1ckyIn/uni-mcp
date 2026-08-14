@@ -19,6 +19,8 @@ Most tools need a course ID. Resolve it first — `canvas_list_courses` for Canv
 - Canvas's own todo list: `canvas_get_todo`.
 - Everything in one course: `canvas_list_assignments`.
 
+Pitfall — **the times these tools print are UTC, with no timezone shown.** Canvas stores due dates in UTC and the markdown output drops the marker, so `2026-08-16 13:59` is a Sydney deadline of `23:59` (UTC+10 in AEST, UTC+11 once daylight saving starts in October) and `2026-10-18 22:00` is the following morning at `09:00`. Convert to the user's local time before saying a deadline out loud, and never quote the raw figure — repeating it verbatim moves every deadline ten hours earlier and invents conflicts with the unit outline that do not exist.
+
 Pitfall — closing time ≠ due time. A Canvas assignment's due date is the real deadline; the "available until" / lock time is often later because it includes a late-submission window. Report the due date, and bring up the closing time only when the user asks about late submission.
 
 ## Finding course materials
