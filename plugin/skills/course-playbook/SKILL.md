@@ -41,12 +41,12 @@ Pitfall — closing time ≠ due time. A Canvas assignment's due date is the rea
 
 - Fetch the official unit outline: `canvas_get_unit_outline_url`, then `fetch_unit_outline`. **Sydney-only:** these two tools work only for University of Sydney units — for other universities, rely on Canvas plus outline documents posted in the course.
 - Cross-check the outline against `canvas_list_assignments`. `verify_assessment_coverage` (also Sydney-only — it fetches the outline) flags missing assessments by comparing counts; it checks no weights, dates or names, so compare those fields yourself.
-- Pitfall — the Type column decides the real format. In the outline's assessment table, a task whose description says "Online quiz" can carry Type "In-class + LockDown Browser". The parsed outline sometimes drops that column: whenever format matters (online vs in-person, invigilation, LockDown Browser), fetch the outline URL directly (WebFetch on Claude Code, or the host's URL-fetch or browser tool) and read the original table.
+- Pitfall — the Type column decides the real format. In the outline's assessment table, a task whose description says "Online quiz" can carry Type "In-class + LockDown Browser". The parsed table has no Type column at all — it carries assessment, weight, due date, length and AI policy — so whenever format matters (online vs in-person, invigilation, LockDown Browser), fetch the outline URL directly (WebFetch on Claude Code, or the host's URL-fetch or browser tool) and read the original table.
 
 ## Grades and submissions
 
 - Grades in one course: `canvas_get_grades`; across all courses: `canvas_get_all_grades`.
-- "Did I submit?": `canvas_get_submission_status`; the submission itself: `canvas_get_my_submission`. For a whole course, `canvas_list_assignments` with `include_submissions=true` answers due-plus-submitted in one pass.
+- "Did I submit?": `canvas_get_submission_status` — it groups a whole course's assignments by state (missing, overdue, not submitted, submitted, graded) with marks, and is the only tool that reports per-assignment state. `canvas_list_assignments` with `include_submissions=true` does not: its markdown output prints name, ID, due date and points only, and reaching the submission fields means `response_format=json`, which for ten assignments costs about a hundred times the tokens. The submission itself: `canvas_get_my_submission`.
 - Peer-review tasks: `canvas_get_peer_reviews`.
 - Assessments run on Gradescope: `gradescope_list_courses` / `gradescope_list_assignments`.
 
