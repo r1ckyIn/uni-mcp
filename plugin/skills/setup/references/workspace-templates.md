@@ -96,6 +96,33 @@ Sites this course needs that no tool reaches — its lecture recordings, a unit-
 Quirks worth remembering. Add to this as they turn up.
 ```
 
+## Outline capture
+
+`<COURSE CODE>/outline.md` — the official outline as fetched, in the university's own wording (this file does not follow the user's language). The header is what makes it quotable later; the body is whatever came back, pasted, not summarised.
+
+```markdown
+# <COURSE CODE> unit outline
+
+Source: <URL>
+Fetched: <date>
+Syllabus: <"included below" / "Canvas has none">
+
+<parsed assessment table and any other outline content, verbatim>
+
+<syllabus body, verbatim, when Canvas has one>
+```
+
+When no outline could be found, the same file records the search instead, so a later session does not repeat it:
+
+```markdown
+# <COURSE CODE> unit outline — not found yet
+
+Tried: <URL or "no Unit Outline tab in Canvas">
+Date: <date>
+Also looked: <course files, modules, Ed resources>
+Next: <when to look again, e.g. "outlines usually appear in week 1">
+```
+
 ## Status files
 
 `status/assessments.md` — setup fills this and refreshes it on every rerun. Its rules:
