@@ -16,6 +16,8 @@
 
 9. **课程筛选与跨平台匹配按真实数据定，留退路。** Canvas 的 active courses 混着学生门户、院系 dashboard、往年考试壳，按「字母紧跟数字」的课号形状过滤（悉尼 `COMP2022`、墨大 `COMP30022`、Monash `FIT1045` 都能过），一个都没剩就说明这学校课号写法不同，直接把原始列表给用户挑，不能静默交出空工作区。Ed 的 `session` 要 Ed 自己的写法（`Semester 2`，不是 Canvas 的 `S2C`），过滤不中会返回空，空结果按「写法不对」重试不带 `session` 的调用，不能当成「这门课没有 Ed」。分页默认值全部显式抬到 100：`canvas_list_courses`、`canvas_list_assignments`、`canvas_list_modules` 默认都是 20，周测型课程一门就能撑破。
 
+10. **实跑一遍真账号定下的六条(2026-08-14,`sandbox/uni-test`,五门课全流程)。** ①**Canvas 返回的 due 是 UTC 且打印时不带时区**——`13:59` 是本地 23:59(悉尼 +10,10 月 DST 后 +11),两门课两个不同偏移都与 DST 切换吻合。原稿把「outline 23:59 / Canvas 13:59」写成需要记录的冲突,那是同一时刻的两种写法,照做会让每份课程地图记满假冲突、还可能把死线说早十小时;这条同时补进 course-playbook 与 AGENTS.md 模板,因为真正回答「什么时候 due」的是那两层。②真冲突是另外两种:Canvas 把 outline 的 closing 填成 due(窗口制 quiz,取早的),以及 outline 只给周次而 Canvas 留空。③放宽成「课号出现在任意位置」后,`2025_S2C_MATH1061_ND_FINALEXAM` 这种往年考试壳会通过,补一条按学期标记丢弃。④Ed 上有而 Canvas 没有的课通常是退课残留(实测四门里两门),不能按「只在 Ed 的课」建目录,要单独列出、默认不选。⑤`canvas_get_syllabus` 悉尼五门课全空,降级为 outline 取不到时的兜底。⑥`canvas_list_announcements` 返回正文,摸底只需要「用不用」,`limit=1` 足够。
+
 ## 后果
 
 - 「重跑 = 增量刷新」的语义落在每一步里：Step 1 认工作区、Step 3 只问新课、Step 4 合并写课程地图不覆盖、Step 5 只刷考核表、Step 7 空提交跳过。没有单独的「增量模式」分支，重跑路径与首跑是同一段文字，不会两套逻辑各腐烂一半。
