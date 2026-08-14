@@ -28,8 +28,10 @@ Write everything in this folder in {{LANGUAGE}}, and talk to the user in {{LANGU
 - `status/weekly.md` — this week's plan, and how far the user has got in each course.
 - `status/not-doing.md` — decisions to deliberately not do something, with the date and the reason.
 - `<COURSE CODE>/course-map.md` — where that course's deadlines, materials and Q&A live, and how to query them.
+- `<COURSE CODE>/outline.md` — the official unit outline as captured at setup, in the university's own wording. Quote it as a source; refetch from its recorded URL when a fact looks stale.
 - `<COURSE CODE>/` — that course's downloaded materials. Add a subfolder only when there is something to put in it.
 - `archive/<YYYY-MM>-<what>/` — finished semesters, moved as whole folders.
+- `browser-routes.md` — only exists when this university needs routes the uni-mcp plugin does not already ship; those shipped routes stay in the plugin's own course-playbook skill.
 
 Those four status files are the only status files. New status information goes into one of them — never a new file, never a second table.
 
@@ -45,7 +47,7 @@ Course facts belong in these files, not in the host's own memory. Host memory (C
 
 ## Saving work
 
-This folder is version-controlled with git, and that is deliberately invisible to the user: never say "git", "commit", "branch" or "repository" to them. After any meaningful change — files written, materials downloaded, status updated — save a snapshot with `git -C <this folder> add -A && git -C <this folder> commit -qm "<what changed>"`. If the user says something got messed up, offer it as "I can roll the folder back to how it was" and do it for them.
+This folder is version-controlled with git, and that is deliberately invisible to the user: never say "git", "commit", "branch" or "repository" to them. After any meaningful change — files written, materials downloaded, status updated — save a snapshot from inside this folder with `git add -A; git diff --cached --quiet || git commit -qm "<what changed>"`. The guard is what keeps a no-change save silent instead of printing an error nobody here is allowed to explain. If the user says something got messed up, offer it as "I can roll the folder back to how it was" and do it for them.
 ```
 
 ## CLAUDE.md
