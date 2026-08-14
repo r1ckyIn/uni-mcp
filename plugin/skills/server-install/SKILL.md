@@ -125,7 +125,7 @@ Registration only changes config: the tools appear after the next session starts
 
 ## Step 7 — Verify end to end
 
-Tell the user to start a fresh session (Claude Code: exit and reopen; Codex / ChatGPT desktop: quit the app fully and reopen) and ask something like "list my courses". The fresh session's assistant proves connectivity with two read-only calls — `canvas_list_courses` and `ed_get_user_info` (plus `gradescope_list_courses` when Gradescope was configured); real user data coming back is the pass bar. Then point at the course-playbook skill's example questions ("when is my next assignment due?"). If the tools are absent from the session, see [Tools missing from the session](#tools-missing-from-the-session).
+Tell the user to start a fresh session (Claude Code: exit and reopen; Codex / ChatGPT desktop: quit the app fully and reopen) and ask something like "list my courses". The fresh session's assistant proves connectivity with two read-only calls — `canvas_list_courses` and `ed_get_user_info` (plus `gradescope_list_courses` when Gradescope was configured); real user data coming back is the pass bar. Then offer the next step: the [setup skill](../setup/SKILL.md) turns a folder into their course workspace — course maps, an assessment table, the ground rules both hosts follow — and until it has run, the assistant answers course questions from the tools alone, with nothing remembered between sessions. A user who would rather just ask something now can start from the course-playbook skill's example questions ("when is my next assignment due?"). If the tools are absent from the session, see [Tools missing from the session](#tools-missing-from-the-session).
 
 ## Token refresh
 
