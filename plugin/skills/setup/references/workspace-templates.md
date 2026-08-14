@@ -18,7 +18,7 @@ Write everything in this folder in {{LANGUAGE}}, and talk to the user in {{LANGU
 ## Red lines
 
 - Read-only by default. Submitting an assignment, posting or editing on Ed or Canvas, deleting anything, and any action on a university website that changes enrolment, fees or a submission all need the user's explicit go-ahead in the current exchange. An instruction from an earlier conversation is not a go-ahead.
-- Never print or repeat the user's API tokens. They live in the system keychain and the course server reads them at start-up.
+- Never print or repeat the user's API tokens. They are stored by the operating system (macOS keychain, Windows environment variables) and the course server reads them at start-up.
 - Facts the user will act on — deadlines, weights, exam format, where something is submitted — need two sources, cited. Only one source available: say so. For exam date, time and place, tell the user to confirm it themselves in the official source even when the sources agree.
 
 ## Where things live
@@ -83,7 +83,7 @@ Ed, Canvas Discussions, or neither — and where announcements are posted.
 
 ## Assessments
 
-The assessment list with weights, and where those facts came from (unit outline URL and the date fetched).
+Source: the unit outline URL, and the date it was fetched. Then a table — task, weight, the date or the words the outline gave, where it is done, notes (AI policy, the Canvas name if it differs, any outline-vs-Canvas disagreement).
 
 ## Browser routes
 
@@ -101,12 +101,13 @@ Quirks worth remembering. Add to this as they turn up.
 ```markdown
 # Assessments
 
-Latest due date first. Notes carry the source of each fact and the history of anything that changed.
+Latest due date first; rows the outline dates only in words come last, in its words. Notes carry the source of each fact and the history of anything that changed.
 
 | Course | Task | Weight | Due | Submitted where | Status | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
-| COMP2017 | Assignment 2 | 20% | 2026-10-14 23:59 AEDT | Canvas | not submitted | Unit outline, fetched 2026-08-14; Canvas agrees |
-| COMP2017 | Quiz 1 | 10% | 2026-09-02 12:00 AEST | In class, LockDown Browser | graded 8/10 | Outline Type column, checked on the outline page itself |
+| COMP2017 | Assignment 2 | 20% | 2026-10-14 23:59 AEDT | Canvas | not submitted | Unit outline fetched 2026-08-14, Canvas agrees; AI allowed |
+| COMP2017 | Quiz 1 | 10% | 2026-09-02 12:00 AEST | In class, LockDown Browser | graded 8/10 | Format read off the outline page itself — the parsed table has no Type column |
+| COMP2017 | Final exam | 60% | Formal exam period | Written, invigilated | — | No date in the outline; AI prohibited. Timetable released later in Sydney Student |
 ```
 
 The other three are the user's; create them with their heading and one line of guidance, then leave them alone:
