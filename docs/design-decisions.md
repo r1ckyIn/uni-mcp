@@ -53,7 +53,7 @@ uni-mcp 是给大学生的开箱即用课程 AI 助手插件：Claude Code 和 C
   - `CLAUDE.md`：一行导入；
   - 状态真相源目录：考核总表（按时间倒排，备注列带溯源与作废账本）、todos、weekly 周计划，外加「明确不做的事」负向决策清单；硬规定「不许另开状态文件」；
   - 每课一个目录（课程代码命名，学期不进路径），内置该课的课程地图文件，资料子结构随用随长，不预建 {lectures,assignments,labs,notes,exams} 五件套空壳；
-  - 学期结束整包挪 `archive/<年月-事件>/`。
+  - 学期结束整包挪 `archive/<年月-事件>/`。〔2026-08-14 更新（issue #7 / ADR-0006）：结构已落地——状态目录固定 `status/{assessments,todos,weekly,not-doing}.md`（文件名英文、内容随用户语言，考核表备注列兼做溯源与作废账本）；AGENTS.md 是英文逐字模板，放 setup skill 的 `references/workspace-templates.md`；浏览器路线不往工作区抄，只在插件未覆盖时才建 `browser-routes.md`；git 静默化补了身份护栏与空提交跳过两处护栏。〕
 - 资料策略：setup 只下载每课 outline / syllabus 总纲，其余日常按需下载并归档进对应目录。
 - 进度：考核状态（due / 交没交 / 成绩，自动来自 MCP 可随时刷新）+ 学习进度（复习到 week 几，日常聊到就记）。
 - git：setup 静默 init，agent 负责提交；对用户只说「改坏了随时可以回滚」这类人话，不暴露 git 术语（小白看不到终端输出）。
@@ -62,7 +62,7 @@ uni-mcp 是给大学生的开箱即用课程 AI 助手插件：Claude Code 和 C
 ## setup skill
 
 - 全插件唯一的显式命令；幂等可重跑，换学期 / 加课 = 重跑走增量刷新。
-- 流程：连通检查（缺哪个服务的凭证就给对应的小红书式取 token 指引）→ list_courses 列出发现的课让用户勾选要管的（最少确认，避免摸旧课）→ 逐课摸底写课程地图 → 把 Outlook、课表、选课系统等无 API 站点记成浏览器路线条目 → 铺目录 → 尾声用用户真实课名输出上手指南（例句：查 due、找课件、搜 Ed），不落 GUIDE 文件。〔2026-08-14 更新（issue #6 / ADR-0005）：取 token 指引与凭证存取已实现于 `server-install` skill，setup 的连通检查届时直接复用、不另写一份。〕
+- 流程：连通检查（缺哪个服务的凭证就给对应的小红书式取 token 指引）→ list_courses 列出发现的课让用户勾选要管的（最少确认，避免摸旧课）→ 逐课摸底写课程地图 → 把 Outlook、课表、选课系统等无 API 站点记成浏览器路线条目 → 铺目录 → 尾声用用户真实课名输出上手指南（例句：查 due、找课件、搜 Ed），不落 GUIDE 文件。〔2026-08-14 更新（issue #6 / ADR-0005）：取 token 指引与凭证存取已实现于 `server-install` skill，setup 的连通检查届时直接复用、不另写一份。〕〔2026-08-14 更新（issue #7 / ADR-0006）：已落地为 `setup` skill，八步流程与逐步的幂等规则见该 SKILL.md；连通检查确按上条复用 server-install，本 skill 不含任何取 token 步骤。〕
 
 ## 门面与语言
 

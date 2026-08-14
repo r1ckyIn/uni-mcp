@@ -1,7 +1,7 @@
 {
   "name": "uni-mcp",
-  "version": "0.5.0",
-  "description": "Out-of-the-box course assistant for university students using Canvas / Ed / Gradescope, built around the canvas-ed-mcp server. Ships the course-playbook knowledge layer (tool routing, pitfall heuristics, USYD browser routes) and a guided canvas-ed-mcp server install with keychain-stored credentials; the setup flow is in development.",
+  "version": "0.6.0",
+  "description": "Out-of-the-box course assistant for university students using Canvas / Ed / Gradescope, built around the canvas-ed-mcp server. Ships the course-playbook knowledge layer (tool routing, pitfall heuristics, USYD browser routes), a guided canvas-ed-mcp server install with keychain-stored credentials, and a one-command setup that maps the user's courses and lays out a course workspace. Canvas support currently targets the University of Sydney.",
   "author": {
     "name": "Ricky",
     "email": "rickyqin919@gmail.com",
@@ -14,13 +14,14 @@
   "interface": {
     "displayName": "uni-mcp",
     "shortDescription": "Course assistant for Canvas / Ed / Gradescope",
-    "longDescription": "Out-of-the-box course assistant for university students using Canvas / Ed / Gradescope, built around the canvas-ed-mcp server. Ships the course-playbook knowledge layer (tool routing, pitfall heuristics, USYD browser routes) and a guided canvas-ed-mcp server install with keychain-stored credentials; the setup flow is in development.",
+    "longDescription": "Out-of-the-box course assistant for university students using Canvas / Ed / Gradescope, built around the canvas-ed-mcp server. Ships the course-playbook knowledge layer (tool routing, pitfall heuristics, USYD browser routes), a guided canvas-ed-mcp server install with keychain-stored credentials, and a one-command setup that maps the user's courses and lays out a course workspace. Canvas support currently targets the University of Sydney.",
     "developerName": "Ricky",
     "category": "Education",
     "capabilities": [],
     "defaultPrompt": [
       "Check uni-mcp",
       "Install the course server",
+      "Set up my course workspace",
       "When is my next assignment due?",
       "Find this week's lecture slides"
     ]
