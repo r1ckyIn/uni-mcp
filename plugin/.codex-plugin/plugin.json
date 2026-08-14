@@ -20,6 +20,7 @@
     "capabilities": [],
     "defaultPrompt": [
       "Check uni-mcp",
+      "Install the course server",
       "When is my next assignment due?",
       "Find this week's lecture slides"
     ]

@@ -28,4 +28,4 @@ codex plugin add uni-mcp@uni-mcp
 
 ## 连接课程服务器
 
-插件装好后，对 AI 说「install the course server」（或「帮我装课程服务器」）。`server-install` 技能会克隆 [canvas-ed-mcp](https://github.com/r1ckyIn/canvas-ed-mcp)、一步步带你取 Canvas 和 Ed 的 token、把 token 存进 macOS 钥匙串（Windows 用环境变量，绝不写明文文件）、为当前宿主注册 server，并做只读连通验证。token 在聊天里只贴一次，之后不会被回显；Canvas token 最长 90 天过期，到期对 AI 说「我的 Canvas token 过期了」只重跑刷新那一段。
+插件装好后，对 AI 说「install the course server」（中文说「帮我装课程服务器」也行）。`server-install` 技能会克隆 [canvas-ed-mcp](https://github.com/r1ckyIn/canvas-ed-mcp)、一步步带你取 Canvas 和 Ed 的 token、把 token 存进 macOS 钥匙串（Windows 用环境变量）、为当前宿主注册 server，并做只读连通验证。Canvas token 最长 90 天过期——到期对 AI 说「我的 Canvas token 过期了」只重跑刷新那一段。服务器目前只对接悉尼大学的 Canvas，其他学校的支持见 [#8](https://github.com/r1ckyIn/uni-mcp/issues/8)。

@@ -7,7 +7,7 @@ description: This skill should be used when the user asks about their university
 
 Static knowledge for answering course questions through the canvas-ed-mcp server (Canvas / Ed / Gradescope tools). Find the question type below and follow its tool chain — the right chain answers in one or two calls instead of paging through raw listings. Apply [Source priority](#source-priority), [Verification](#verification) and the [Read-only rule](#read-only-rule) to every answer.
 
-Tool names below are canvas-ed-mcp tool names; the host may show them with a server prefix such as `mcp__canvas-ed-mcp__`. If these tools are absent from the session, tell the user the canvas-ed-mcp server is not connected yet and point at <https://github.com/r1ckyIn/uni-mcp> — answer from real tool output or not at all.
+Tool names below are canvas-ed-mcp tool names; the host may show them with a server prefix such as `mcp__canvas-ed-mcp__`. If these tools are absent from the session, tell the user the canvas-ed-mcp server is not connected yet and offer to connect it via the server-install skill (reference: <https://github.com/r1ckyIn/uni-mcp>) — answer from real tool output or not at all.
 
 Most tools need a course ID. Resolve it first — `canvas_list_courses` for Canvas, `ed_list_courses` for Ed, `gradescope_list_courses` for Gradescope — and match the user's course by code or name. The three platforms' ID spaces are unrelated: a Canvas course ID is meaningless on Ed, so resolve per platform rather than reusing an ID across them.
 

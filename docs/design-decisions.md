@@ -27,8 +27,8 @@ uni-mcp 是给大学生的开箱即用课程 AI 助手插件：Claude Code 和 C
 
 - canvas-ed-mcp 唯一改动：把写死的悉尼 Canvas 网址（`CANVAS_BASE_URL` 及域名校验）改成环境变量可配，默认悉尼；unit outline 抓取保持 USYD 专属，由知识层标注「仅悉尼可用」。
 - 不打包（不加 pyproject）、不把 server 塞进插件仓。
-- 安装走提示词驱动：小红书发布提示词（Ricky 撰写），让用户的 AI 按 setup skill 的约定把 canvas-ed-mcp clone 到约定位置、装依赖、注册 MCP 配置、只读验证可用性。
-- 凭证流程：用户照小红书配图流程取 token（Canvas：Account → Settings → 拉到底 Approved Integrations → New Access Token，有效期上限 90 天，只显示一次；Ed：搜「ed api」进 edstem.org 的 settings/api-tokens 页，先选学校区域再登录，创建令牌只显示一次），token 直接贴聊天里，agent 写入 macOS 钥匙串（Windows 退环境变量），启动时从钥匙串读取，明文不落盘、后续调用不回显。风险兜底：Canvas token 90 天自动过期、随时可删除重生成、指引保留「谁拿着谁就能查你的课表，别发给任何人」警告。
+- 安装走提示词驱动：小红书发布提示词（Ricky 撰写），让用户的 AI 按 setup skill 的约定把 canvas-ed-mcp clone 到约定位置、装依赖、注册 MCP 配置、只读验证可用性。〔2026-08-14 更新（issue #6 / ADR-0005）：已落地为独立 `server-install` skill、不并入 setup（#7）；约定位置 `~/.uni-mcp/canvas-ed-mcp`，提示词定稿在 docs/xiaohongshu.md，流程唯一真源是该 skill。〕
+- 凭证流程：用户照小红书配图流程取 token（Canvas：Account → Settings → 拉到底 Approved Integrations → New Access Token，有效期上限 90 天，只显示一次；Ed：搜「ed api」进 edstem.org 的 settings/api-tokens 页，先选学校区域再登录，创建令牌只显示一次），token 直接贴聊天里，agent 写入 macOS 钥匙串（Windows 退环境变量），启动时从钥匙串读取，明文不落盘、后续调用不回显。风险兜底：Canvas token 90 天自动过期、随时可删除重生成、指引保留「谁拿着谁就能查你的课表，别发给任何人」警告。〔2026-08-14 更新（issue #6 / ADR-0005）：凭证链路已落地——钥匙串写入、MCP 启动命令经 `security` 命令替换现读、Windows 退 `setx`，均见 `server-install` skill 与 ADR-0005。〕
 
 ## 知识层（三层）
 
@@ -62,7 +62,7 @@ uni-mcp 是给大学生的开箱即用课程 AI 助手插件：Claude Code 和 C
 ## setup skill
 
 - 全插件唯一的显式命令；幂等可重跑，换学期 / 加课 = 重跑走增量刷新。
-- 流程：连通检查（缺哪个服务的凭证就给对应的小红书式取 token 指引）→ list_courses 列出发现的课让用户勾选要管的（最少确认，避免摸旧课）→ 逐课摸底写课程地图 → 把 Outlook、课表、选课系统等无 API 站点记成浏览器路线条目 → 铺目录 → 尾声用用户真实课名输出上手指南（例句：查 due、找课件、搜 Ed），不落 GUIDE 文件。
+- 流程：连通检查（缺哪个服务的凭证就给对应的小红书式取 token 指引）→ list_courses 列出发现的课让用户勾选要管的（最少确认，避免摸旧课）→ 逐课摸底写课程地图 → 把 Outlook、课表、选课系统等无 API 站点记成浏览器路线条目 → 铺目录 → 尾声用用户真实课名输出上手指南（例句：查 due、找课件、搜 Ed），不落 GUIDE 文件。〔2026-08-14 更新（issue #6 / ADR-0005）：取 token 指引与凭证存取已实现于 `server-install` skill，setup 的连通检查届时直接复用、不另写一份。〕
 
 ## 门面与语言
 
