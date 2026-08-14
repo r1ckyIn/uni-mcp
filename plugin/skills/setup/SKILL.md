@@ -1,6 +1,6 @@
 ---
 name: setup
-description: This skill should be used when the user asks to set up their course workspace — "run setup", "set up my courses" (in any language) — or wants to add a course, start a new semester, refresh the workspace after an enrolment change ("I dropped a unit"), or has just installed the canvas-ed-mcp server and wants the workspace built. Covers checking connectivity, choosing which courses to manage, mapping each course, laying out the workspace files (AGENTS.md, status truth source, one directory per course), and putting the folder under version control. Safe to rerun — a rerun refreshes incrementally.
+description: This skill should be used when the user asks to set up their course workspace — "run setup", "set up uni-mcp", "set up my courses", "get me set up" (in any language) — or wants to add a course, start a new semester, refresh the workspace after an enrolment change ("I dropped a unit"), or has just installed the canvas-ed-mcp server and wants the workspace built. Covers checking connectivity, choosing which courses to manage, mapping each course, laying out the workspace files (AGENTS.md, status truth source, one directory per course), and putting the folder under version control. Safe to rerun — a rerun refreshes incrementally.
 ---
 
 # Setup
@@ -9,7 +9,7 @@ Turn a folder into the user's course workspace: the place every course fact live
 
 Assume the user knows nothing about terminals or version control. Run every command for them, ask for one thing at a time, and never make them open a file to answer a question. Two rules hold across every step:
 
-- **Their language.** Everything written into the workspace — course maps, status files, headings, table columns — is written in the language the user is talking to you in. The one exception is `AGENTS.md`, copied verbatim in English from the template because AI hosts read it.
+- **Their language.** Everything written into the workspace — course maps, status files, headings, table columns — is written in the language the user is talking to you in. `AGENTS.md` and `CLAUDE.md` are the exception: both come from the template in English because AI hosts read them, and the only edit is filling in `{{LANGUAGE}}`. A captured source document such as a unit outline also keeps its original wording (Step 4).
 - **No jargon.** Never say "git", "commit", "repository" or "branch" to the user. Say "saved" and "I can roll it back".
 
 ## Step 1 — Confirm the folder
@@ -21,9 +21,11 @@ The workspace is the folder the session is running in. Look at what is in it:
 - Empty, or holding only the user's own course files → name the folder in plain words ("I'll set up your course assistant in ~/uni") and get a yes.
 - Holding unrelated work (source code, another project's files, a checkout of some repository) → stop and say why: a course workspace should not share a folder with something else, because everything in it gets managed and saved as one thing. Offer to create a fresh one — `mkdir -p ~/uni` — and continue there.
 
+Done when the user and you are working on the same folder and both know which one it is.
+
 ## Step 2 — Check connectivity
 
-Prove the tools work before promising anything, with two read-only calls: `canvas_list_courses` with the Step 3 arguments already applied (`enrollment_state=active`, `limit=100`), so one call serves both steps, and `ed_get_user_info`. Also try `gradescope_list_courses`; an error there means Gradescope is unusable — either never configured, or the stored password stopped working (university SSO accounts need a native password set through "forgot password"). Say so once, note Gradescope as absent, and carry on: the rest of setup does not depend on it, and server-install can add it later without any re-registration.
+Prove the tools work before promising anything, with two read-only calls: `canvas_list_courses` with the Step 3 arguments already applied (`enrollment_state=active`, `limit=100`), so one call serves both steps, and `ed_get_user_info`. Also try `gradescope_list_courses`; an error there means Gradescope is unusable — never configured, or the stored password stopped working — and server-install's optional Gradescope step fixes either. Say so once, note Gradescope as absent, and carry on: nothing else in setup depends on it.
 
 - **Tools absent from the session** → the canvas-ed-mcp server is not connected: follow the server-install skill, from [Tools missing from the session](../server-install/SKILL.md#tools-missing-from-the-session) when the server is already installed, or the whole flow when it is not. Either way the tools only appear in a fresh session, so setup cannot continue in this one — finish that flow, have the user restart the host, and start setup again from Step 1.
 - **A call fails with an authentication error** → that one service's token is missing or expired (Sydney Canvas tokens expire within 90 days). Run [Token refresh](../server-install/SKILL.md#token-refresh) for that service only. The running server read the old token when it started, so a fresh one reaches it only after the host restarts — same as above: restart, then start setup again from Step 1.
@@ -47,11 +49,11 @@ When it is unclear which semester is current, read it off a Canvas course code (
 
 Then ask **once**: show the merged list and let the user pick which courses to manage, defaulting to every unit that survived the filter. This is the only bulk question in the flow — do not confirm course by course.
 
-On a rerun, show the already-managed courses as already picked and ask only about the ones that are new. A course the user no longer takes stays on disk; setup never deletes a course folder (semester-end archiving is in `AGENTS.md`).
+On a rerun, show the already-managed courses as already picked and ask only about the ones that are new. A course the user no longer takes stays on disk; setup never deletes a course folder (semester-end archiving is in `AGENTS.md`). Done when a named list of courses to manage exists, each with the platform IDs found for it.
 
 ## Step 4 — Map each course
 
-For each picked course, one recon pass, then one file. Keep it to these calls — this is a survey, not a full sync:
+For each picked course, one recon pass, then one file. Keep it to these calls — this is a survey, not a full sync. A course that exists only on Ed or Gradescope skips the Canvas calls entirely and records `Canvas: none` in its map:
 
 - `canvas_get_course` — official name and term.
 - `canvas_get_syllabus` — the syllabus body. Many units answer "has no syllabus content"; that is normal, not a failure, and it means the unit outline is the only overview document.
@@ -74,11 +76,13 @@ Done when every course the user picked has a map and an outline file, including 
 
 ## Step 5 — Lay out the workspace files
 
-First the two files that make every later session behave, both copied verbatim from [references/workspace-templates.md](references/workspace-templates.md): `AGENTS.md`, with the language placeholder filled in, and the one-line `CLAUDE.md` that imports it (Claude Code does not read `AGENTS.md` by itself). Without them the red lines, the verification rule and the save habit never reach the sessions that come after this one. On a rerun, a file that is already there is left as it is — the user may have edited it.
+First the two files that make every later session behave, both copied from [references/workspace-templates.md](references/workspace-templates.md) — resolve that path from this skill's own directory, not from the workspace the session is sitting in: `AGENTS.md`, with the language placeholder filled in, and the one-line `CLAUDE.md` that imports it (Claude Code does not read `AGENTS.md` by itself). Without them the red lines, the verification rule and the save habit never reach the sessions that come after this one.
+
+Both belong to the plugin, so a rerun refreshes `AGENTS.md` from the current template rather than leaving it be — a workspace built by an older version of the plugin is exactly how a stale red line survives — while keeping any section the user added under a heading of their own. A `CLAUDE.md` that already imports `@AGENTS.md` is left alone.
 
 Then `status/`, which holds exactly four files, created on the first run and updated in place afterwards. Their shapes are in the same templates file:
 
-- `assessments.md` — every assessment from every managed course in one table, latest due date first. One row per assessment component from the outline, not per Canvas assignment object: a unit whose outline lists "weekly quiz, 10%" can carry a dozen `Quiz – Week N` objects in Canvas, and copying them all turns a five-course table into sixty rows. Keep the component row, note the cadence, and put the next instance's date in the due column. Outlines hand out plenty of rows with no real date ("Multiple weeks", "Formal exam period"): keep those words verbatim and put those rows after the dated ones rather than inventing a date to sort by. The notes column carries where each fact came from — plus the outline's AI policy, which comes free with the same fetch — and when a fact changes it keeps the superseded value with the date it changed instead of deleting it. The status column stays empty at setup: the recon reads deadlines, not submissions, and "did I submit / what did I get" is a live question answered later with `canvas_get_submission_status` or `canvas_get_grades` for the one course being asked about.
+- `assessments.md` — every assessment from every managed course in one table. Its column rules and sort order live beside the example in the templates file; the one to hold in mind while filling it is that a row is an assessment component from the outline, not a Canvas assignment object, because a unit whose outline lists "weekly quiz, 10%" carries a dozen `Quiz – Week N` objects and copying them all turns a five-course table into sixty rows.
 - `todos.md` — everything to do that is not an assessment.
 - `weekly.md` — this week's plan, plus how far the user has got in each course.
 - `not-doing.md` — decisions to deliberately not do something, with the date and the reason, so the same idea is not reconsidered every week.
@@ -91,11 +95,13 @@ Done when `AGENTS.md`, `CLAUDE.md` and the four status files exist, and every as
 
 Some university systems have no API: timetable, enrolment and census, official results, lecture recordings, university email. University of Sydney routes already ship with the plugin in [course-playbook's routes file](../course-playbook/references/usyd-browser-routes.md) — do not copy them into the workspace.
 
-Write a workspace `browser-routes.md` only for what that file does not cover: another university's equivalents, the user's email (Outlook web), a portal specific to their degree. Use the same shape as the shipped routes — site, URL, what is there, how to query it, pitfalls. A quirk that belongs to one course (this unit records on Zoom rather than Echo360) goes in that course's map instead. Nothing to record means no file.
+Write a workspace `browser-routes.md` only for what that file does not cover: another university's equivalents, the user's email (Outlook web), a portal specific to their degree. Use the same shape as the shipped routes — site, URL, what is there, how to query it, pitfalls. A quirk that belongs to one course (this unit records on Zoom rather than Echo360) goes in that course's map instead. Nothing to record means no file — which is the normal outcome for a Sydney user, and is done.
 
 ## Step 7 — Save the folder
 
 Silently put the workspace under version control and take the first snapshot. Keep the path quoted — a folder like `~/Uni Work` breaks every unquoted `-C`. The identity guard matters too: on a machine where git was never configured, or where one of the two values is set to an empty string, `commit` dies and the user sees a wall of git output that means nothing to them. Test the value, not the exit status — `git config user.email` exits 0 on an empty value.
+
+Check first that the folder is not already inside somebody else's repository — `~/uni` under a dotfiles checkout is the common way this happens, and Step 1 cannot see it by looking at the folder's own contents. `git -C "<workspace>" rev-parse --show-toplevel` printing anything other than the workspace itself means a nested repository would be created: say so and offer a folder outside it instead.
 
 ```bash
 git -C "<workspace>" init -q
@@ -105,7 +111,7 @@ git -C "<workspace>" add -A
 git -C "<workspace>" diff --cached --quiet || git -C "<workspace>" commit -qm "Set up course workspace"
 ```
 
-The `diff --cached --quiet` guard makes a rerun that changed nothing a no-op instead of an error. Tell the user one sentence with no jargon: everything is saved, and if something later gets messed up, say so and it can be rolled back to how it was. From then on `AGENTS.md` carries the habit — later sessions save a snapshot after each meaningful change. Done when the folder holds a commit covering every file setup wrote and the user has heard that one sentence.
+`add -A` deliberately takes everything, downloaded course materials included: they are small, they never leave the machine, and a student who loses a marked-up slide deck cares more about getting it back than about repository tidiness. The `diff --cached --quiet` guard makes a rerun that changed nothing a no-op instead of an error. Tell the user one sentence with no jargon: everything is saved, and if something later gets messed up, say so and it can be rolled back to how it was. From then on `AGENTS.md` carries the habit — later sessions save a snapshot after each meaningful change. Done when the folder holds a commit covering every file setup wrote and the user has heard that one sentence.
 
 ## Step 8 — Hand over
 
@@ -116,4 +122,4 @@ Finish in the chat, not in a file. Using the user's real course names, give thre
 - an Ed question ("search Ed for what the STAT2011 quiz covers")
 - an assessment-facts question ("how much is the COMP3221 final worth?")
 
-Then two facts they need: this folder is where they open Claude Code or ChatGPT desktop from now on, and adding a course or starting a new semester means asking for setup again. Write no guide file — a `GUIDE.md` nobody opens is worse than four examples they can paste right now.
+Then two facts they need: this folder is where they open Claude Code or ChatGPT desktop from now on, and adding a course or starting a new semester means asking for setup again. Write no guide file — a `GUIDE.md` nobody opens is worse than four examples they can paste right now. Done when those examples name the user's own courses, not the ones above.
