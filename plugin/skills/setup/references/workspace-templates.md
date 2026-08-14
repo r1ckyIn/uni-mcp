@@ -23,7 +23,7 @@ Write everything in this folder in {{LANGUAGE}}, and talk to the user in {{LANGU
 
 ## Where things live
 
-- `status/assessments.md` — every assessment across all courses, furthest-out due date first. The notes column records where each fact came from; when a fact changes, the superseded value stays with the date it changed rather than being deleted. The status column is filled in per row when the user asks, from `canvas_get_submission_status`.
+- `status/assessments.md` — every assessment across all courses: repeating items first, then the soonest deadline down to the end of semester. The notes column records where each fact came from; when a fact changes, the superseded value stays with the date it changed rather than being deleted. The status column is filled in per row when the user asks, from `canvas_get_submission_status`.
 - `status/todos.md` — everything to do that is not an assessment.
 - `status/weekly.md` — this week's plan, and how far the user has got in each course.
 - `status/not-doing.md` — decisions to deliberately not do something, with the date and the reason.
@@ -100,7 +100,7 @@ Quirks worth remembering. Add to this as they turn up.
 
 `status/assessments.md` — setup fills this and refreshes it on every rerun. Its rules:
 
-- **Sort:** the furthest-out due date at the top, the soonest deadline at the bottom (the design decision's "按时间倒排"). Rows the outline dates only in words — "Multiple weeks", "Formal exam period" — go below all the dated ones, keeping the outline's own wording instead of a date invented to sort by.
+- **Sort:** the soonest deadline at the top, the end of semester at the bottom. Anything that repeats — a weekly quiz, a weekly lab exercise — goes above the dated rows, since it is always imminent. A row the outline dates only in words keeps those words ("Formal exam period") and sits where that phrase falls in the semester, which for an exam period is the end.
 - **Rows:** one per assessment component from the outline, never one per Canvas assignment object. A weekly component gets a single row, a note of its cadence, and the next instance's date in the due column.
 - **Notes:** where each fact came from, plus the AI policy that arrives with the same outline fetch. When a fact changes, the superseded value stays in this column with the date it changed.
 - **Status:** left empty by setup — the recon reads deadlines, not submissions. Later sessions fill a row in when the user asks, from `canvas_get_submission_status`, which is the only tool that reports per-assignment state and marks (`canvas_get_grades` and `canvas_get_all_grades` return course totals).
@@ -108,12 +108,13 @@ Quirks worth remembering. Add to this as they turn up.
 ```markdown
 # Assessments
 
-Furthest-out due date first; rows the outline dates only in words come last, keeping the outline's own wording. Notes carry the source of each fact and the history of anything that changed.
+Repeating items first, then the soonest deadline down to the end of semester. Rows the outline dates only in words keep those words. Notes carry the source of each fact and the history of anything that changed.
 
 | Course | Task | Weight | Due | Submitted where | Status | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
-| COMP2017 | Assignment 2 | 20% | 2026-10-14 23:59 AEDT | Canvas | | Unit outline fetched 2026-08-14, Canvas agrees; AI allowed |
-| COMP2017 | Weekly quiz | 10% | next: 2026-09-02 12:00 AEST | Gradescope | | Weekly, weeks 2–12; one outline component, twelve Canvas objects |
+| COMP2017 | Weekly quiz | 10% | every Sunday 23:59 | Gradescope | | Weeks 2–12, best 10 of 12; one outline component, twelve Canvas objects |
+| COMP2017 | Assignment 2 | 20% | 2026-09-02 23:59 AEST | Canvas | | Unit outline fetched 2026-08-14, Canvas agrees; AI allowed |
+| COMP2017 | Mid-semester test | 20% | 2026-10-14 08:30 AEDT | In class, invigilated | | Format read off the outline page itself — the parsed table has no Type column |
 | COMP2017 | Final exam | 60% | Formal exam period | Written, invigilated | | No date in the outline; AI prohibited. Timetable released later in Sydney Student |
 ```
 
