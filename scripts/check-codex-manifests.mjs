@@ -242,10 +242,12 @@ function checkPluginManifest(sourceDir) {
 }
 
 // Codex-only skill rules the Claude-side strict validation (check 2) cannot
-// know: every skills/ subdir needs a SKILL.md, and disable-model-invocation
-// must be false. Frontmatter keys are matched line-wise instead of via a YAML
-// parser (no deps); stricter than the authority on exotic YAML spellings of
-// false ("no", "off"), which only ever errs toward red.
+// know: every skills/ subdir needs a SKILL.md, disable-model-invocation must
+// be false, and frontmatter name/description must be non-empty (issue #17:
+// strict mode passes a missing `name`, but validate_plugin.py rejects it).
+// Frontmatter keys are matched line-wise instead of via a YAML parser (no
+// deps); stricter than the authority on exotic YAML spellings of false
+// ("no", "off"), which only ever errs toward red.
 function checkSkills(sourceDir) {
   const skillsRoot = join(sourceDir, "skills");
   if (!isDir(skillsRoot)) return;
@@ -266,9 +268,31 @@ function checkSkills(sourceDir) {
       errors.push(`codex skills: skill \`${entry}\` frontmatter is not closed`);
       continue;
     }
-    const match = contents.slice(4, end).match(/^disable[-_]model[-_]invocation\s*:\s*(.+?)\s*$/m);
+    const frontmatter = contents.slice(4, end);
+    const match = frontmatter.match(/^disable[-_]model[-_]invocation\s*:\s*(.+?)\s*$/m);
     if (match && !/^(false|False|FALSE)$/.test(match[1])) {
       errors.push(`codex skills: skill \`${entry}\` frontmatter field \`disable-model-invocation\` must be false`);
+    }
+    for (const field of ["name", "description"]) {
+      // Mirrors the authority's yaml.safe_load + strip() for common spellings:
+      // quoted empties ("" / '') are empty; unquoted values drop a trailing
+      // ` # comment` and the YAML null spellings (null/~) are empty. Horizontal
+      // whitespace only — \s would cross the newline and capture the NEXT line
+      // as the value of an empty `name:`. Exotic YAML (block scalars, duplicate
+      // keys) and the agents/openai.yaml checks are not mirrored here;
+      // validate_plugin.py remains the authority on those.
+      const line = frontmatter.match(new RegExp(`^${field}[ \\t]*:[ \\t]*(.*?)[ \\t]*$`, "m"));
+      let value = line ? line[1] : "";
+      const quoted = value.match(/^(["'])(.*)\1$/);
+      if (quoted) {
+        value = quoted[2].trim();
+      } else {
+        value = value.replace(/(^|\s)#.*$/, "").trim();
+        if (/^(null|Null|NULL|~)$/.test(value)) value = "";
+      }
+      if (value === "") {
+        errors.push(`codex skills: skill \`${entry}\` frontmatter field \`${field}\` must be non-empty`);
+      }
     }
   }
 }

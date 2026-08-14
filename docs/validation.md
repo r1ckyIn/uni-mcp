@@ -17,7 +17,7 @@ Requirements: `claude` (Claude Code CLI) and `node`/`npm` on PATH, plus a one-ti
 | 2 | Plugin manifest structure + skills norms (manifest + `skills/*/SKILL.md` under the marketplace entry's `source` dir, currently `plugin/`) | `claude plugin validate <source>/.claude-plugin/plugin.json --strict`, `<source>` read from marketplace.json | — |
 | 3 | Markdown lint | `markdownlint-cli2` (pinned via npx) | `.markdownlint-cli2.jsonc` |
 | 4 | Dead links: repo-internal relative links and heading anchors | `remark-validate-links` (pinned via npx) | `.remarkignore` |
-| 5 | Codex-side manifests: `.agents/plugins/marketplace.json` structure, `.codex-plugin/plugin.json` under each entry's `source` dir, Codex-only skill rules (`SKILL.md` presence, `disable-model-invocation`), name/version/marketplace-name/source-path sync with the Claude side | `node scripts/check-codex-manifests.mjs` | — |
+| 5 | Codex-side manifests: `.agents/plugins/marketplace.json` structure, `.codex-plugin/plugin.json` under each entry's `source` dir, Codex-only skill rules (`SKILL.md` presence, `disable-model-invocation`, non-empty frontmatter `name`/`description`), name/version/marketplace-name/source-path sync with the Claude side | `node scripts/check-codex-manifests.mjs` | — |
 
 Check 2 runs warning-free: the plugin root is `plugin/` (ADR-0002), which carries no dev files, so under `--strict` any warning is a real failure. The old CLAUDE.md-at-plugin-root whitelist is gone with the layout that required it. Check 2's target path is derived from marketplace.json's `source` field rather than hard-coded, so the check always follows what users actually install and a dangling `source` turns it red.
 
