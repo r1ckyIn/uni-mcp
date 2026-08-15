@@ -1,7 +1,7 @@
 {
   "name": "uni-mcp",
-  "version": "0.6.0",
-  "description": "Out-of-the-box course assistant for university students using Canvas / Ed / Gradescope, built around the canvas-ed-mcp server. Ships the course-playbook knowledge layer (tool routing, pitfall heuristics, USYD browser routes), a guided canvas-ed-mcp server install with keychain-stored credentials, and a one-command setup that maps the user's courses and lays out a course workspace. Canvas support currently targets the University of Sydney.",
+  "version": "0.6.1",
+  "description": "Out-of-the-box course assistant for university students using Canvas / Ed / Gradescope, built around the canvas-ed-mcp server. Ships the course-playbook knowledge layer (tool routing, pitfall heuristics, USYD browser routes), a guided canvas-ed-mcp server install with keychain-stored credentials, a one-command setup that maps the user's courses and lays out a course workspace, and an install-check that confirms the plugin loads. Canvas support currently targets the University of Sydney.",
   "author": {
     "name": "Ricky",
     "email": "rickyqin919@gmail.com",

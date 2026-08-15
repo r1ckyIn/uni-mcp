@@ -1,6 +1,6 @@
 ---
 name: server-install
-description: This skill should be used when the user asks to install, set up, or connect the canvas-ed-mcp course server — "install the course server", "set up canvas-ed-mcp", "connect my Canvas / Ed" — or pastes a setup prompt that points at this skill, or needs to store, refresh, or replace a Canvas or Ed API token ("my Canvas token expired"), or has the uni-mcp plugin installed but the canvas-ed-mcp tools are missing from the session. Covers cloning the server, installing dependencies, walking the user to their tokens, storing tokens in the macOS keychain (on Windows, environment variables), registering the server with Claude Code or Codex / ChatGPT desktop, and verifying read-only connectivity.
+description: This skill should be used when the user asks to install, set up, or connect the canvas-ed-mcp course server — "install the course server", "set up canvas-ed-mcp", "connect my Canvas / Ed" (in any language) — or pastes a setup prompt that points at this skill, or needs to store, refresh, or replace a Canvas or Ed API token ("my Canvas token expired"), or has the uni-mcp plugin installed but the canvas-ed-mcp tools are missing from the session. Covers cloning the server, installing dependencies, walking the user to their tokens, storing tokens in the macOS keychain (on Windows, environment variables), registering the server with Claude Code or Codex / ChatGPT desktop, and verifying read-only connectivity.
 ---
 
 # Server Install

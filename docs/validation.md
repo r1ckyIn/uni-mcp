@@ -7,6 +7,8 @@ scripts/validate.sh        # all checks against this repo — must be green
 scripts/test-validate.sh   # fixture tests — every fixture must make validate.sh fail
 ```
 
+This file covers static validation only. The manual acceptance record — the two-host stranger walkthrough required by #9 — lives in [acceptance.md](acceptance.md) (Chinese).
+
 Requirements: `claude` (Claude Code CLI) and `node`/`npm` on PATH, plus a one-time `npm ci` (the lint/link tools are pinned in `package.json` — dev-only, nothing ships with the plugin). `validate.sh` fails loudly if `node_modules` is missing; no check is ever silently skipped.
 
 ## Checks
@@ -27,6 +29,8 @@ Check 5 has no host CLI to lean on: `codex plugin marketplace add` / `codex plug
 
 - **External URLs are not link-checked.** Check 4 is fully offline so CI stays deterministic; live-HTTP checking of `https://` links is flaky (rate limits, bot walls). If external checking is ever wanted, add a separate tool such as lychee as a new check — do not weaken check 4.
 - Markdown line length (MD013) is off: the docs are Chinese prose.
+- Inline HTML (MD033) allows exactly `div` and `br`, which the bilingual README facade (#9) uses for its centered header; any other element still fails.
+- First-line-H1 (MD041) stays on repo-wide; only the two READMEs opt out, each via an inline `markdownlint-configure-file` comment, because they open with the centered `<div>`.
 
 ## Fixtures — proving the checks work
 

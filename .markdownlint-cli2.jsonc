@@ -6,6 +6,10 @@
   "ignores": ["node_modules/**", "tests/fixtures/**"],
   "config": {
     // Long lines are fine: docs are Chinese prose where 80 chars is unusable.
-    "MD013": false
+    "MD013": false,
+    // The bilingual README facade centers its header with minimal HTML (#9).
+    // MD041 (first-line H1) stays on repo-wide; the two READMEs opt out
+    // individually via an inline markdownlint-configure-file comment.
+    "MD033": { "allowed_elements": ["div", "br"] }
   }
 }
